@@ -8,70 +8,87 @@
 import SwiftUI
 
 
-struct PickerNota: View {
-    @Binding var num: Int
-     var label: String
-    var body: some View {
-        VStack(alignment: .leading) {
-            Text(label)
-            Picker("\(num)", selection: $num) {
-                ForEach(0..<50) { num in
-                    Text("\(num)")
-                        .tag(num)
-                }
-            }.pickerStyle(.wheel)
-                .cornerRadius(10)
-        }
-    }
-}
-
-
 struct ContentView: View {
     
     @State var nome: String = ""
     
-    @State var numAs = 5
-    @State var numBs = 5
-    @State var numCs = 5
-    @State var numDs = 5
-    @State var numFFs = 5
-    @State var numCancelados = 5
+    @State var numAs = 0
+    @State var numBs = 0
+    @State var numCs = 0
+    @State var numDs = 0
+    @State var numFFs = 0
+    @State var numCancelados = 0
     @State var i3: Double = 0.0
     
     var body: some View {
-        
         VStack {
-            
-            Text("I3: \(String(format: "%.2f",i3))")
-            HStack {
-                PickerNota(num: $numAs, label: "As")
+            ZStack{
+                Rectangle()
+                    .fill(.red)
+                    .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height*0.1, alignment: .center)
+                Text("Calculadora do I3")
+                    .frame(alignment: .bottom)
+                    .offset(y: 23)
+                HStack{
+                    Spacer()
+                    Image("UfrgsLogo")
+                        .resizable()
+                        .frame(width: 60, height: 60, alignment: .bottom)
+                        .offset(x: -15, y: 15)
+                }
+            }
+            HStack{
+                Text("I3: ")
+                    .font(.title)
+                    .padding(.vertical, 20)
+                ZStack{
+                    Rectangle()
+                        .fill(.red)
+                        .frame(width: UIScreen.main.bounds.width*0.2, height: UIScreen.main.bounds.height*0.05, alignment: .center)
+                    Text("\(String(format: "%.2f",i3))")
+                        .font(.title)
+                }
+                .padding(.vertical, 20)
+                
+            }
+            Text("Selecione o número de notas:")
+                .padding(.horizontal)
+                .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width/5, alignment: .topLeading)
+                .minimumScaleFactor(0.80)
+                .lineLimit(1)
+                .font(.headline)
+            HStack(spacing: 20) {
+                PickerNota(num: $numAs, label: "As\n")
                     .onChange(of: numAs) { _ in
                         calcula()
                     }
-                PickerNota(num: $numBs, label: "Bs")
+                PickerNota(num: $numBs, label: "Bs\n")
                     .onChange(of: numBs) { _ in
                         calcula()
                     }
-                PickerNota(num: $numCs, label: "Cs")
+                PickerNota(num: $numCs, label: "Cs\n")
                     .onChange(of: numCs) { _ in
                         calcula()
                     }
-                PickerNota(num: $numDs, label: "Ds")
+            }
+            HStack{
+                PickerNota(num: $numDs, label: "Ds\n")
                     .onChange(of: numDs) { _ in
                         calcula()
                     }
-                PickerNota(num: $numFFs, label: "FFs")
+                PickerNota(num: $numFFs, label: "FFs\n")
                     .onChange(of: numFFs) { _ in
                         calcula()
                     }
-                PickerNota(num: $numCancelados, label: "Cancel")
+                PickerNota(num: $numCancelados, label: "Canc\nTranc")
+                    .minimumScaleFactor(0.8)
+                    .lineLimit(2)
                     .onChange(of: numCancelados) { _ in
                         calcula()
                     }
             }
-            
-        }
-        .padding()
+            Spacer()
+        }.ignoresSafeArea()
     }
     
     func calculaI3(numAs: Int, numBs: Int, numCs: Int, numDs: Int, numFFs: Int, numCancelado: Int) -> Double{
@@ -101,10 +118,4 @@ struct ContentView: View {
         
     }
     
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-    }
 }
