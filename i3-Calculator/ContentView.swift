@@ -19,22 +19,23 @@ struct ContentView: View {
     @State var numFFs = 0
     @State var numCancelados = 0
     @State var i3: Double = 0.0
+    @State var color: Color = .red
     
     var body: some View {
         VStack {
             ZStack{
                 Rectangle()
                     .fill(.red)
-                    .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height*0.1, alignment: .center)
+                    .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height*0.12, alignment: .center)
                 Text("Calculadora do I3")
                     .frame(alignment: .bottom)
-                    .offset(y: 23)
+                    .offset(y: 25)
                 HStack{
                     Spacer()
                     Image("UfrgsLogo")
                         .resizable()
                         .frame(width: 60, height: 60, alignment: .bottom)
-                        .offset(x: -15, y: 15)
+                        .offset(x: -15, y: 18)
                 }
             }
             HStack{
@@ -42,10 +43,10 @@ struct ContentView: View {
                     .font(.title)
                     .padding(.vertical, 20)
                 ZStack{
-                    Rectangle()
-                        .fill(.red)
-                        .frame(width: UIScreen.main.bounds.width*0.2, height: UIScreen.main.bounds.height*0.05, alignment: .center)
-                    Text("\(String(format: "%.2f",i3))")
+                    RoundedRectangle(cornerRadius: 10)
+                        .fill(color)
+                        .frame(width: UIScreen.main.bounds.width*0.3, height: UIScreen.main.bounds.height*0.05, alignment: .center)
+                    Text("\(String(format: "%.4f",i3))")
                         .font(.title)
                 }
                 .padding(.vertical, 20)
@@ -88,8 +89,28 @@ struct ContentView: View {
                     }
             }
             Spacer()
-        }.ignoresSafeArea()
+        }
+        .onChange(of: i3, perform: { _ in
+            if(i3 >= 9){
+                color = .green
+            }
+            else{
+                if(i3 >= 7.5){
+                    color = .blue
+                }
+                else{
+                    if(i3 >= 6){
+                        color = .orange
+                    }
+                    else{
+                        color = .red
+                    }
+                }
+            }
+        })
+        .ignoresSafeArea()
     }
+    
     
     func calculaI3(numAs: Int, numBs: Int, numCs: Int, numDs: Int, numFFs: Int, numCancelado: Int) -> Double{
         
