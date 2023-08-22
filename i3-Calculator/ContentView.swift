@@ -8,18 +8,19 @@
 import SwiftUI
 
 
+
 struct ContentView: View {
     
     @State var nome: String = ""
     
-    @State var numAs = 0
-    @State var numBs = 0
-    @State var numCs = 0
-    @State var numDs = 0
-    @State var numFFs = 0
-    @State var numCancelados = 0
-    @State var i3: Double = 0.0
-    @State var color: Color = .red
+    @AppStorage("numAs") private var numAs = 0
+    @AppStorage("numBs") private var numBs = 0
+    @AppStorage("numCs") private var numCs = 0
+    @AppStorage("numDs") private var numDs = 0
+    @AppStorage("numFs") private var numFFs = 0
+    @AppStorage("numCancs") private var numCancelados = 0
+    @State private var i3: Double = 0.0
+    @State private var color: Color = .red
     
     var body: some View {
         VStack {
@@ -27,20 +28,22 @@ struct ContentView: View {
                 Rectangle()
                     .fill(.red)
                     .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height*0.12, alignment: .center)
-                Text("Calculadora do I3")
+                Text("Calculadora I3")
                     .frame(alignment: .bottom)
                     .offset(y: 25)
+                    .font(.title)
                 HStack{
                     Spacer()
-                    Image("UfrgsLogo")
+                    Image("ufrgslogo 1")
                         .resizable()
-                        .frame(width: 60, height: 60, alignment: .bottom)
-                        .offset(x: -15, y: 18)
+                        .frame(width: 40, height: 40, alignment: .bottom)
+                        .offset(x: -20, y: 25)
                 }
             }
             HStack{
                 Text("I3: ")
                     .font(.title)
+                    .bold()
                     .padding(.vertical, 20)
                 ZStack{
                     RoundedRectangle(cornerRadius: 10)
@@ -48,6 +51,7 @@ struct ContentView: View {
                         .frame(width: UIScreen.main.bounds.width*0.3, height: UIScreen.main.bounds.height*0.05, alignment: .center)
                     Text("\(String(format: "%.4f",i3))")
                         .font(.title)
+                        .bold()
                 }
                 .padding(.vertical, 20)
                 
@@ -108,19 +112,22 @@ struct ContentView: View {
                 }
             }
         })
+        .onAppear(perform: {
+            calcula()
+        })
         .ignoresSafeArea()
     }
     
     
-    func calculaI3(numAs: Int, numBs: Int, numCs: Int, numDs: Int, numFFs: Int, numCancelado: Int) -> Double{
-        
-        let numerador: Int = numFFs + numCancelado + numDs + numBs + numAs + numCs
-        
-        let denominador: Double = Double(numFFs) + 0.5*Double(numCancelado) + (1/3)*Double(numDs) + (1/6)*Double(numCs) + (1/8)*Double(numBs) + (1/10)*Double(numAs)
-        
-        let i3:Double = Double(numerador)/denominador
-        return i3
-    }
+//    func calculaI3(numAs: Int, numBs: Int, numCs: Int, numDs: Int, numFFs: Int, numCancelado: Int) -> Double{
+//        
+//        let numerador: Int = numFFs + numCancelado + numDs + numBs + numAs + numCs
+//        
+//        let denominador: Double = Double(numFFs) + 0.5*Double(numCancelado) + (1/3)*Double(numDs) + (1/6)*Double(numCs) + (1/8)*Double(numBs) + (1/10)*Double(numAs)
+//        
+//        let i3:Double = Double(numerador)/denominador
+//        return i3
+//    }
     
     func calcula(){
         
@@ -134,9 +141,12 @@ struct ContentView: View {
         let numerador: Int = numA + numB + numC + numD + numFF + numCancelado
         
         let denominador: Double = Double(numFF) + 0.5*Double(numCancelado) + (1/3)*Double(numD) + (1/6)*Double(numC) + (1/8)*Double(numB) + (1/10)*Double(numA)
-        
-        i3 = Double(numerador)/denominador
-        
+        if(denominador == 0) {
+            i3 = 0
+        }
+        else {
+            i3 = Double(numerador)/denominador
+        }
     }
     
 }
